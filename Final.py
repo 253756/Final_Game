@@ -16,6 +16,7 @@ screen_rect = screen.get_rect()
 rows = screen_rect.height // tile_size
 cols = screen_rect.width // tile_size
 
+
 #drawing my ocean onthe screen
 def update():
     for x in range(int(rows)):
@@ -30,15 +31,30 @@ pygame.display.flip()
 x=50
 y=520
 
+clock = pygame.time.Clock()
+obstacle = Obstacle1(screen, 0,0)
+
+obstacle_width = obstacle.rect.width
+available_space_x = 640 - (2*obstacle_width)
+number_obstacles_x = available_space_x // (2*obstacle_width)
+
+obstacle_height = obstacle.rect.height
+available_space_y = 300 - (2*obstacle_height)
+number_obstacles_y = available_space_y // (2*obstacle_height)
+obstacles = pygame.sprite.Group()
+
+for i in range(number_obstacles_x):
+    for j in range(number_obstacles_y):
+        obstacles.add(Obstacle1(screen, obstacle_width + 2 * obstacle_width * i, obstacle_height + 2 * obstacle_height * j))
 #first obstacle
-obstacle = Ship2()
-position_y = 0
-position_x = random.randint(0,600)
+##obstacle = Ship2()
+#position_y = 0
+#position_x = random.randint(0,600)
 
 #obstacle
-clock = pygame.time.Clock()
+#clock = pygame.time.Clock()
 speed = 1
-obs_list = []
+#obs_list = []
 
 while True:
     for event in pygame.event.get():
@@ -50,22 +66,19 @@ while True:
         x-=3
     elif keys[pygame.K_RIGHT]:
         x+=3
-    position_y += 1
+    #position_y += 1
     update()
     player1_rect = player1.rect
     #player1.draw(screen)
     screen.blit(player1.image, (x,y))
-    screen.blit(obstacle.image,(position_x,position_y))
-    y_position = 0
-    x_position= random.randint(0,600)
-    speed = 1
-    y_position += speed
-    obs = Obstacle1(2,[x_position, y_position])
-    obs_list.append(obs)
-    for course in obs_list:
-        course.draw(screen)
-        course.drop(speed)
-    collision = pygame.sprite.collide_rect(player1, obs)
+    obstacles.update()
+    obstacles.draw(screen)
+    pygame.display.flip()
+    clock.tick(500)
+    collision = pygame.sprite.collide_rect(player1,obstacle)
     if collision:
-        player1.health -= 1
+        player1.health -= 40
+        print("you just got hit")
+        print(player1.health)
+    print(screen_rect)
     pygame.display.flip()

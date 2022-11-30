@@ -9,7 +9,7 @@ class Ship1:
         # movement flags
         self.moving_right = False
         self.moving_left = False
-        self.health = 700
+        self.health = 100000
 
 
     def _check_events(self):
