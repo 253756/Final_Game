@@ -75,10 +75,22 @@ while True:
     obstacles.draw(screen)
     pygame.display.flip()
     clock.tick(500)
-    collision = pygame.sprite.collide_rect(player1,obstacle)
+    collision = pygame.sprite.collide_rect(player1, obstacle)
     if collision:
         player1.health -= 40
         print("you just got hit")
         print(player1.health)
     print(screen_rect)
     pygame.display.flip()
+
+    print(player1.rect)
+
+
+obj_list = []
+obj_list.append(player)
+for obj in obj_list:
+    obj.update()
+
+def update(self):
+    rect[0] +=
+    rect[2] +=

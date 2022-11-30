@@ -15,6 +15,9 @@ class Obstacle1(pygame.sprite.Sprite):
         self.rect.y += 1
         if self.rect.top > self.screen.get_rect().bottom:
             self.rect.bottom = 0
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
     #def drop(self, speed):
     #    self.position[1] += speed
 
