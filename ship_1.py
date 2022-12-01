@@ -4,12 +4,12 @@ import sys
 class Ship1:
     def __init__(self):
         self.image = pygame.image.load("images/ship1.png")
-        self.dead_image = pygame.image.load('images/player_1.png')
+        self.dead_image = pygame.image.load('images/dead_ship.png')
         self.rect = self.image.get_rect()
         # movement flags
         self.moving_right = False
         self.moving_left = False
-        self.health = 100000
+        self.health = 1000
 
 
     def _check_events(self):
@@ -58,3 +58,6 @@ class Ship1:
         if self.health <= 0:
             self.image = self.dead_image
         surface.blit(self.image, self.rect)
+
+    def move(self, coordinate):
+        self.rect.center = coordinate

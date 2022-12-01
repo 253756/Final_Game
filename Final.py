@@ -28,7 +28,7 @@ player1 = Ship1()
 
 pygame.display.flip()
 #points for the first ship origin
-x=50
+x=320
 y=520
 
 clock = pygame.time.Clock()
@@ -43,8 +43,8 @@ available_space_y = 300 - (2*obstacle_height)
 number_obstacles_y = available_space_y // (2*obstacle_height)
 obstacles = pygame.sprite.Group()
 
-for i in range(number_obstacles_x):
-    for j in range(number_obstacles_y):
+for i in range(5):
+    for j in range(5):
         obstacles.add(Obstacle1(screen, obstacle_width + 2 * obstacle_width * i, obstacle_height + 2 * obstacle_height * j))
 #first obstacle
 ##obstacle = Ship2()
@@ -64,20 +64,22 @@ while True:
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
         x-=3
-    elif keys[pygame.K_RIGHT]:
+    elif keys[pygame.K_RIGHT] :
         x+=3
     #position_y += 1
     update()
     player1_rect = player1.rect
-    #player1.draw(screen)
-    screen.blit(player1.image, (x,y))
+    player1.draw(screen)
+    #screen.blit(player1.image, (x,y))
+    coordinate = (x,y)
+    player1.move(coordinate)
     obstacles.update()
     obstacles.draw(screen)
     pygame.display.flip()
-    clock.tick(500)
-    collision = pygame.sprite.collide_rect(player1, obstacle)
+    clock.tick(60)
+    collision = pygame.sprite.spritecollide(player1, obstacles, dokill= False)
     if collision:
-        player1.health -= 40
+        player1.health -= 1
         print("you just got hit")
         print(player1.health)
     print(screen_rect)
@@ -86,11 +88,11 @@ while True:
     print(player1.rect)
 
 
-obj_list = []
-obj_list.append(player)
-for obj in obj_list:
-    obj.update()
+#obj_list = []
+#obj_list.append(player)
+#for obj in obj_list:
+ #   obj.update()
 
-def update(self):
-    rect[0] +=
-    rect[2] +=
+#def update(self):
+ #   rect[0] +=
+ #   rect[2] +=
