@@ -8,6 +8,7 @@ class Obstacle1(pygame.sprite.Sprite):
         self.moving_down = False
         self.image = pygame.image.load('images/rain_drop.png')
         self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
 
@@ -15,6 +16,9 @@ class Obstacle1(pygame.sprite.Sprite):
         self.rect.y += 1
         if self.rect.top > self.screen.get_rect().bottom:
             self.rect.bottom = 0
+
+   # def random(self):
+        ##if self.rect.top > self.screen.get_rect().bottom:
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
