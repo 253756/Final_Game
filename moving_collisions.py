@@ -46,6 +46,13 @@ obs_x = random.randint(0, 640)
 life_x = random.randint(0,640)
 life_y = -30
 
+obstacles = pygame.sprite.Group()
+def create_obstacle(num):
+    for i in range(1,num+1):
+        obstacle = Obstacle1()
+        obstacles.add(obstacle)
+create_obstacle(2)
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -86,7 +93,6 @@ while True:
     obs_y = obs_y + obstacle_speed
     life_y = life_y + obstacle_speed
     obstacle = Obstacle1(screen, obs_x, obs_y)
-    obstacle2 = Obstacle1(screen, 0, 0)
     obstacle_rect = obstacle.rect
     life = Health(screen, life_x, life_y)
     collision1 = pygame.sprite.collide_rect(player1, obstacle)
