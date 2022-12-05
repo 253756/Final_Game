@@ -1,10 +1,11 @@
 import pygame
 import sys
 from ship_1 import Ship1
-from test_obstacle import Ship2
 import random
 from obstacle_1 import Obstacle1
 from health import Health
+from ship_2 import Ship2
+
 pygame.init()
 
 background_tile = pygame.image.load("images/water_tile.png")
@@ -28,10 +29,10 @@ def update():
 player1 = Ship1()
 
 #bring in player 2
-player2 = Ship1()
+player2 = Ship2()
 
 #points for the first ship origin
-x = 320
+x = 480
 y=600
 
 f = 160
@@ -42,7 +43,8 @@ speed = 1
 obs_x = random.randint(0, 640)
 
 #bring in health
-life = Health(screen)
+life_x = random.randint(0,640)
+life_y = -30
 
 while True:
     for event in pygame.event.get():
@@ -74,30 +76,41 @@ while True:
         obs_y = -30
         obs_x = random.randint(0,640)
         obstacle_speed = random.randint(2,5)
+    if life_y >= 640:
+        life_y = -30
+        life_x = random.randint(0,640)
+        player1.health -= 50
+        player2.health -= 50
+
     # obstacle move down the screen
     obs_y = obs_y + obstacle_speed
-
+    life_y = life_y + obstacle_speed
     obstacle = Obstacle1(screen, obs_x, obs_y)
     obstacle2 = Obstacle1(screen, 0, 0)
     obstacle_rect = obstacle.rect
-
-    collision = pygame.sprite.collide_rect(player1, obstacle)
-    collision = pygame.sprite.collide_rect(player2,obstacle)
-    if collision:
+    life = Health(screen, life_x, life_y)
+    collision1 = pygame.sprite.collide_rect(player1, obstacle)
+    collision2 = pygame.sprite.collide_rect(player2,obstacle)
+    if collision1:
         player1.health -= 50
         print("you just got hit")
         print(player1.health)
         obs_y = -30
         obs_x = random.randint(0, 640)
         obstacle_speed = random.randint(2, 5)
-
+    if collision2:
+        player2.health -= 50
+        print("you just got hit")
+        print(player2.health)
+        obs_y = -30
+        obs_x = random.randint(0, 640)
+        obstacle_speed = random.randint(2, 5)
     update()
     player1_rect = player1.rect
     player1.draw(screen)
     player2.draw(screen)
     obstacle.draw(screen)
-    #obstacle2.draw(screen)
-    #life.draw(screen)
+    life.draw(screen)
     coordinate = (x,y)
     coordinate2 = (f,g)
     player2.move(coordinate2)
