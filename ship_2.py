@@ -31,3 +31,10 @@ class Ship2:
     def blitme(self):
         """Draw the basket at its current location"""
         self.screen.blit(self.image, self.rect)
+    def updates(self):
+        if self.moving_right and self.rect.right < self.screen_rect.right:
+            self.x += 3
+        if self.moving_left and self.rect.left > 0:
+            self.x -= 3
+        # Update rect object from self.x
+        self.rect.x = self.x

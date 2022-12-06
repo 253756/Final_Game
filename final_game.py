@@ -28,17 +28,17 @@ class Final():
         self.player2 = Ship2(self)
 
     def run_game(self):
-        self._check_events()
-        self._ship_1_check()
-        self._ship_2_check()
-        self._player1_and_obstacle_collision()
-        self._player2_and_obstacle_collision()
-        self._check_obsatcles_bottom()
-        self._drop_obstacles()
-        self.clock.tick(100)
-        self.update()
-        self.player1.updates()
-        pygame.display.flip()
+        while True:
+            self._check_events()
+            self.player1.updates()
+            self.player2.updates()
+            self._player1_and_obstacle_collision()
+            self._player2_and_obstacle_collision()
+            self._check_obsatcles_bottom()
+            self._drop_obstacles()
+            self.clock.tick(100)
+            self.update()
+
 
     #drawing my ocean on the screen
     def update(self):
@@ -47,37 +47,36 @@ class Final():
                 self.screen.blit(self.background_tile, (x*self.water_rect.height, y*self.water_rect.width))
         self.player1.blitme()
         self.player2.blitme()
+        pygame.display.flip()
 
     def _check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
-    def _ship_1_check(self):
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RIGHT:
-                    self.player1.moving_right = True
-                elif event.key == pygame.K_LEFT:
-                    self.player1.moving_left = True
+            elif event.type == pygame.KEYDOWN:
+                self._keydown_event(event)
             elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_RIGHT:
-                    self.player1.moving_right = False
-                elif event.key == pygame.K_LEFT:
-                    self.player1.moving_left = False
-    def _ship_2_check(self):
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_d:
-                    self.player2.moving_up = True
-                elif event.key == pygame.K_a:
-                    self.player2.moving_down = True
-            elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_d:
-                    self.player2.moving_up = False
-                elif event.key == pygame.K_a:
-                    self.player2.moving_down = False
+                self._keyup_event(event)
+    def _keydown_event(self,event):
+        if event.key == pygame.K_RIGHT:
+            self.player1.moving_right = True
+        elif event.key == pygame.K_LEFT:
+            self.player1.moving_left = True
+            print("ship left")
+        elif event.key == pygame.K_d:
+            self.player2.moving_right = True
+        elif event.key == pygame.K_a:
+            self.player2.moving_left = True
+    def _keyup_event(self,event):
+        if event.key == pygame.K_RIGHT:
+            self.player1.moving_right = False
+        elif event.key == pygame.K_LEFT:
+            self.player1.moving_left = False
+        elif event.key == pygame.K_d:
+            self.player2.moving_right = False
+        elif event.key == pygame.K_a:
+            self.player2.moving_left = False
     def _player1_and_obstacle_collision(self):
         collisions = pygame.sprite.spritecollide(self.player1, self.obstacles, True)
         if collisions:
@@ -118,6 +117,6 @@ class Final():
                     new_obstacle = Obstacle1(self)
                     self.obstacles.add(new_obstacle)
 
-while True:
+if __name__ == '__main__':
     game = Final()
     game.run_game()
