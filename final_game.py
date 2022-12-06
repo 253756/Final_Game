@@ -5,6 +5,8 @@ import random
 from obstacle_1 import Obstacle1
 from health import Health
 from ship_2 import Ship2
+from button import Button
+
 
 class Final():
     def __init__(self):
@@ -19,21 +21,24 @@ class Final():
         self.cols = self.screen_rect.width//self.tile_size
         self.clock = pygame.time.Clock()
         self.obstacles = pygame.sprite.Group()
+        self.button = Button(320,320)
 
         #bring in players
         self.player1 = Ship1(self)
         self.player2 = Ship2(self)
 
     def run_game(self):
-        self._check_events()
-        self._ship_1_check()
-        self._ship_2_check()
-        self._player1_and_obstacle_collision()
-        self._player2_and_obstacle_collision()
-        self._check_obsatcles_bottom()
-        self._drop_obstacles()
         self.update()
-        self.clock.tick(100)
+        if self.button.draw(self.screen):
+            self.update()
+            self._check_events()
+            self._ship_1_check()
+            self._ship_2_check()
+            self._player1_and_obstacle_collision()
+            self._player2_and_obstacle_collision()
+            self._check_obsatcles_bottom()
+            self._drop_obstacles()
+            self.clock.tick(100)
         pygame.display.flip()
 
     #drawing my ocean on the screen

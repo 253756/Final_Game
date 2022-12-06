@@ -1,4 +1,30 @@
-import pygame.font
+import pygame
 
 class Button():
-    def __init__(self):
+	def __init__(self, x, y):
+		#width = image.get_width()
+		#height = image.get_height()
+		self.image = pygame.image.load('images/untitled.png').convert_alpha()
+		self.rect = self.image.get_rect()
+		self.rect.center = (x, y)
+		self.clicked = False
+
+	def draw(self, surface):
+		action = False
+		#get mouse position
+		position = pygame.mouse.get_pos()
+
+		#check mouseover and clicked conditions
+		if self.rect.collidepoint(position):
+			if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+				self.clicked = True
+				action = True
+
+			if pygame.mouse.get_pressed()[0] == 0:
+				action = False
+
+		#draw button on screen
+		surface.blit(self.image, (self.rect.x, self.rect.y))
+
+		return action
+

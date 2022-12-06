@@ -4,7 +4,7 @@ from ship_1 import Ship1
 from test_obstacle import Ship2
 import random
 from obstacle_1 import Obstacle1
-
+from button import Button
 pygame.init()
 
 background_tile = pygame.image.load("images/water_tile.png")
