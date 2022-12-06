@@ -24,6 +24,18 @@ class Final():
         self.player1 = Ship1(self)
         self.player2 = Ship2(self)
 
+    def run_game(self):
+        self._check_events()
+        self._ship_1_check()
+        self._ship_2_check()
+        self._player1_and_obstacle_collision()
+        self._player2_and_obstacle_collision()
+        self._check_obsatcles_bottom()
+        self._drop_obstacles()
+        self.update()
+        self.clock.tick(100)
+        pygame.display.flip()
+
     #drawing my ocean on the screen
     def update(self):
         for x in range(int(self.rows)):
@@ -104,13 +116,4 @@ class Final():
 
 while True:
     game = Final()
-    game._check_events()
-    game._ship_1_check()
-    game._ship_2_check()
-    game._player1_and_obstacle_collision()
-    game._player2_and_obstacle_collision()
-    game._check_obsatcles_bottom()
-    game._drop_obstacles()
-    game.update()
-    game.clock.tick(100)
-    pygame.display.flip()
+    game.run_game()
