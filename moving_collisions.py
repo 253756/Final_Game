@@ -35,23 +35,21 @@ player2 = Ship2()
 x = 480
 y=600
 
+#points for second ship origin
 f = 160
 g = 600
+
+#speed and starting points of obstacle
 obstacle_speed = 3
 obs_y = -30
 speed = 1
 obs_x = random.randint(0, 640)
 
-#bring in health
+#bring in health starting points
 life_x = random.randint(0,640)
-life_y = -30
+life_y = -60
 
 obstacles = pygame.sprite.Group()
-def create_obstacle(num):
-    for i in range(1,num+1):
-        obstacle = Obstacle1()
-        obstacles.add(obstacle)
-create_obstacle(2)
 
 while True:
     for event in pygame.event.get():
@@ -59,16 +57,17 @@ while True:
             pygame.quit()
             sys.exit()
     keys = pygame.key.get_pressed()
+    #movement of player 1
     if keys[pygame.K_LEFT]:
         x -= 3
     elif keys[pygame.K_RIGHT]:
         x += 3
-    # set the boundaries
+    #set the boundaries for player 1
     if x >= 624:
         x = 624
     if x < 21:
-        x = 20
-    #movement of player 2
+       x = 20
+    #movement of player 2 and boundaries
     if keys[pygame.K_a]:
         f -= 3
     if keys[pygame.K_d]:
@@ -83,20 +82,39 @@ while True:
         obs_y = -30
         obs_x = random.randint(0,640)
         obstacle_speed = random.randint(2,5)
+
+    #when life leaves the boundaries
     if life_y >= 640:
-        life_y = -30
+        life_y = -60
         life_x = random.randint(0,640)
         player1.health -= 50
         player2.health -= 50
 
     # obstacle move down the screen
     obs_y = obs_y + obstacle_speed
+
+    #move health down the screen
     life_y = life_y + obstacle_speed
+
+    #draw obstacle on screen
     obstacle = Obstacle1(screen, obs_x, obs_y)
     obstacle_rect = obstacle.rect
+
+    def create_obstacle(num):
+       for i in range(1,num+1):
+        obstacle = Obstacle1(screen, obs_x, obs_y)
+        obstacles.add(obstacle)
+    create_obstacle(5)
+
+    #draw life on screen
     life = Health(screen, life_x, life_y)
+
+    #collision of obstacles and life with players
     collision1 = pygame.sprite.collide_rect(player1, obstacle)
     collision2 = pygame.sprite.collide_rect(player2,obstacle)
+    collision3 = pygame.sprite.collide_rect(player1, life)
+    collision4 = pygame.sprite.collide_rect(player2, life)
+    #collision with obstacle -- loose health
     if collision1:
         player1.health -= 50
         print("you just got hit")
@@ -111,8 +129,20 @@ while True:
         obs_y = -30
         obs_x = random.randint(0, 640)
         obstacle_speed = random.randint(2, 5)
+
+    #collision with life -- gain health
+    if collision3:
+        player1.health += 10
+        life_y = -60
+        life_x = random.randint(0, 640)
+    if collision4:
+        player2.health += 10
+        life_y = -60
+        life_x = random.randint(0, 640)
     update()
     player1_rect = player1.rect
+
+    #draw ships and obstacles to screen
     player1.draw(screen)
     player2.draw(screen)
     obstacle.draw(screen)

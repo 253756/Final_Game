@@ -1,16 +1,18 @@
 import pygame
+import random
 
 class Obstacle1(pygame.sprite.Sprite):
-    def __init__(self, screen, x, y):
+    def __init__(self,game):
         super().__init__()
-        self.screen = screen
+        self.screen = game.screen
+        self.screen_rect = game.screen.get_rect()
         self.moving_up = False
         self.moving_down = False
         self.image = pygame.image.load('images/rain_drop.png')
         self.rect = self.image.get_rect()
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.x = random.randint(0,640)
+        self.y = -30
+        self.speed = 1
 
     def update(self):
         self.rect.y += 1
