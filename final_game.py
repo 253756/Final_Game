@@ -28,17 +28,16 @@ class Final():
         self.player2 = Ship2(self)
 
     def run_game(self):
+        self._check_events()
+        self._ship_1_check()
+        self._ship_2_check()
+        self._player1_and_obstacle_collision()
+        self._player2_and_obstacle_collision()
+        self._check_obsatcles_bottom()
+        self._drop_obstacles()
+        self.clock.tick(100)
         self.update()
-        if self.button.draw(self.screen):
-            self.update()
-            self._check_events()
-            self._ship_1_check()
-            self._ship_2_check()
-            self._player1_and_obstacle_collision()
-            self._player2_and_obstacle_collision()
-            self._check_obsatcles_bottom()
-            self._drop_obstacles()
-            self.clock.tick(100)
+        self.player1.update()
         pygame.display.flip()
 
     #drawing my ocean on the screen
