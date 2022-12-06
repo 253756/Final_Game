@@ -37,7 +37,7 @@ class Final():
         self._drop_obstacles()
         self.clock.tick(100)
         self.update()
-        self.player1.update()
+        self.player1.updates()
         pygame.display.flip()
 
     #drawing my ocean on the screen
