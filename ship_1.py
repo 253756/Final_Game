@@ -18,7 +18,6 @@ class Ship1:
         # Movement flag
         self.moving_right = False
         self.moving_left = False
-        #set the boundaries!!
 
     #def draw(self, surface):
      #   if self.health <=300:
@@ -32,8 +31,8 @@ class Ship1:
 
     def blitme(self):
         self.screen.blit(self.image, self.rect)
+        
     def updates(self):
-        # Update the basket's x value, not the rect.
         if self.moving_right and self.rect.right < self.screen_rect.right:
             self.x += 3
         if self.moving_left and self.rect.left > 0:
