@@ -10,8 +10,8 @@ class Obstacle1(pygame.sprite.Sprite):
         self.moving_down = False
         self.image = pygame.image.load('images/rain_drop.png')
         self.rect = self.image.get_rect()
-        self.x = random.randint(0,640)
-        self.y = -30
+        self.rect.x = random.randint(0,640)
+        self.rect.y = 20
         self.speed = 1
 
     def update(self):

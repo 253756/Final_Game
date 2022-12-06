@@ -7,7 +7,6 @@ from health import Health
 from ship_2 import Ship2
 from button import Button
 
-
 class Final():
     def __init__(self):
         pygame.init()
@@ -21,6 +20,7 @@ class Final():
         self.cols = self.screen_rect.width//self.tile_size
         self.clock = pygame.time.Clock()
         self.obstacles = pygame.sprite.Group()
+        self.new_obstacle = Obstacle1(self)
         self.button = Button(320,320)
 
         #bring in players
@@ -28,13 +28,16 @@ class Final():
         self.player2 = Ship2(self)
 
     def run_game(self):
+        #put button here
+        #active = False
         while True:
             self._check_events()
             self.player1.updates()
             self.player2.updates()
+            self.new_obstacle.draw(self.screen)
             self._player1_and_obstacle_collision()
             self._player2_and_obstacle_collision()
-            self._check_obsatcles_bottom()
+            self._check_obstacles_bottom()
             self._drop_obstacles()
             self.clock.tick(100)
             self.update()
@@ -47,6 +50,8 @@ class Final():
                 self.screen.blit(self.background_tile, (x*self.water_rect.height, y*self.water_rect.width))
         self.player1.blitme()
         self.player2.blitme()
+        self.new_obstacle.draw(self.screen)
+        self.new_obstacle.update()
         pygame.display.flip()
 
     def _check_events(self):
@@ -89,22 +94,27 @@ class Final():
             # If collision detected add a point
             self.player2.health -= 50
 
-    def _check_obsatcles_bottom(self):
-        '''It checks if the apple crosses the screen bottom'''
+    def _check_obstacles_bottom(self):
+        '''It checks if the obstacle crosses the screen bottom'''
         screen_rect = self.screen.get_rect()
         for obstacle in self.obstacles.sprites():
             if obstacle.rect.bottom >= screen_rect.bottom:
                 break
 
     def _drop_obstacles(self):
-        '''Drop apples from the top, randomly'''
+        '''Drop obstacles from the top, randomly'''
         if len(self.obstacles) == 0:
                 new_obstacle = Obstacle1(self)
                 self.obstacles.add(new_obstacle)
         if len(self.obstacles) == 1:
+            self.new_obstacle.draw(self.screen)
+            self.new_obstacle.update()
             for obstacle in self.obstacles.sprites():
+                print(obstacle.rect)
                 if obstacle.rect.bottom > 300:
                     new_obstacle = Obstacle1(self)
+                    new_obstacle.draw(self.screen)
+                    new_obstacle.update()
                     self.obstacles.add(new_obstacle)
         if len(self.obstacles) == 2:
             for obstacle in self.obstacles.sprites():
