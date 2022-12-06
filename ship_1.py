@@ -31,10 +31,8 @@ class Ship1:
         self.rect.center = coordinate
 
     def blitme(self):
-        """Draw the basket at its current location"""
         self.screen.blit(self.image, self.rect)
     def updates(self):
-        """Update the basket position based on the movement flag."""
         # Update the basket's x value, not the rect.
         if self.moving_right and self.rect.right < self.screen_rect.right:
             self.x += 3
