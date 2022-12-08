@@ -23,6 +23,8 @@ class Final():
         self.cols = self.screen_rect.width//self.tile_size
 
         self.settings = Settings()
+        #adding sounds
+        self.explosion = pygame.mixer.Sound('sounds/explosion.mp3')
 
         #bring in players
         self.player1 = Ship1(self)
@@ -39,7 +41,7 @@ class Final():
         self.active = False
 
     def run_game(self):
-        #helped with button - Ethan
+        #helped with button - Brody and Ethan
         #call function with blank screen and button
         self.first_screen()
         while True:
@@ -124,16 +126,18 @@ class Final():
         """When player1 and obstacle collide the health goes down and score changes"""
         collisions = pygame.sprite.spritecollide(self.player1, self.obstacles, True)
         if collisions:
-            # If collision detected add a point
+            # If collision detected take away life
             self.player1.health -= 100
+            pygame.mixer.Sound.play(self.explosion)
             self.score.player1_score()
 
     def _player2_and_obstacle_collision(self):
         """When player2 and obstacle collide the health goes down and score changes"""
         collisions = pygame.sprite.spritecollide(self.player2, self.obstacles, True)
         if collisions:
-            # If collision detected add a point
+            # If collision detected take away life
             self.player2.health -= 100
+            pygame.mixer.Sound.play(self.explosion)
             self.score.player2_score()
 
     def _check_obstacles_bottom(self):

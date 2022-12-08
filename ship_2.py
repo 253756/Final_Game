@@ -8,6 +8,7 @@ class Ship2:
         self.screen_rect = game.screen.get_rect()
 
         # Load the images
+        #Adam helped with images
         self.image = pygame.image.load('images/ship2.png')
         self.dead_image = pygame.image.load('images/dead_ship2.png')
         self.rect = self.image.get_rect()

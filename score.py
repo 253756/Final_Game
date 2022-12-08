@@ -4,6 +4,7 @@ from pygame.sprite import Group
 
 class Score:
     def __init__(self, game):
+        #ethan helped with score
         self.game = game
         self.screen = game.screen
         self.screen_rect = self.screen.get_rect()
