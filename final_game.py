@@ -240,13 +240,17 @@ class Final():
         if self.settings.life_speed and self.settings.obstacle_speed >= 6:
             self.settings.life_speed = 6
             self.settings.obstacle_speed = 6
-        if self.settings.life_speed >= 3:
+        if self.settings.life_speed <=2.7:
+            self.settings.level = 0
+        elif self.settings.life_speed <= 3:
+            self.settings.level = 1
+        elif self.settings.life_speed <= 4:
             self.settings.level = 2
-        elif self.settings.life_speed >= 4:
+        elif self.settings.life_speed <= 5:
             self.settings.level = 3
-        elif self.settings.life_speed >= 5:
+        elif self.settings.life_speed <= 6:
             self.settings.level = 4
-        elif self.settings.life_speed >= 6:
+        elif self.settings.life_speed <= 7:
             self.settings.level = 5
         self.score.prep_level()
 

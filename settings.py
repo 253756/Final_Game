@@ -7,7 +7,7 @@ class Settings:
         #controls numbers
         self.increase = 0.05
         self.life_speed = self.life_speed
-        self.level = 1
+        self.level = 0
         self.bg_color = (230,230,230)
 
 
