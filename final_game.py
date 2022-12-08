@@ -24,6 +24,7 @@ class Final():
 
         self.settings = Settings()
         #adding sounds
+        #Jack helped with adding sound
         self.explosion = pygame.mixer.Sound('sounds/explosion.mp3')
 
         #bring in players
@@ -250,11 +251,11 @@ class Final():
         self.score.prep_level()
 
     def check_health(self):
-        """"when health is below 50 the game quits and is done"""
-        if self.player1.health <= -50:
+        """"when health is below 100 the game quits and is done"""
+        if self.player1.health <= -100:
             pygame.quit()
             sys.exit()
-        if self.player2.health <= -50:
+        if self.player2.health <= -100:
             pygame.quit()
             sys.exit()
 
