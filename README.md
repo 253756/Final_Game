@@ -1,6 +1,6 @@
 Save The Planes
 
-In this game you must protect the planes at all cost. Make sure to dodge the explosions falling from the sky but try to get more health by catching the hearts. As you play longer they start falling faster.
+In this game you must protect the planes at all cost. Make sure to dodge the explosions falling from the sky but try to get more health by catching the hearts. As you play longer they start falling faster. Once your plane turns grey it means you are close to dying. 
 
 
 List of files:
