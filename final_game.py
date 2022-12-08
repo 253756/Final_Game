@@ -5,12 +5,13 @@ import random
 from obstacle_1 import Obstacle1
 from health import Health
 from ship_2 import Ship2
-from button import Button
+from buttons import Button
 
 class Final():
     def __init__(self):
         pygame.init()
         self.background_tile = pygame.image.load("images/water_tile.png")
+        self.button = pygame.image.load("images/start_button.png")
         self.water_rect = self.background_tile.get_rect()
         self.tile_size = self.water_rect.width
         self.screen = pygame.display.set_mode((10*self.tile_size,10*self.tile_size))
@@ -20,29 +21,41 @@ class Final():
         self.cols = self.screen_rect.width//self.tile_size
         self.clock = pygame.time.Clock()
         self.obstacles = pygame.sprite.Group()
-        self.new_obstacle = Obstacle1(self)
-        self.button = Button(320,320)
+        self.lifes = pygame.sprite.Group()
+        #self.new_obstacle = Obstacle1(self)
+        self.button = Button(self)
 
         #bring in players
         self.player1 = Ship1(self)
         self.player2 = Ship2(self)
 
+        self.active = False
+
     def run_game(self):
-        #put button here
-        #active = False
+        #helped with button - Ethan
+        self.first_screen()
         while True:
             self._check_events()
-            self.player1.updates()
-            self.player2.updates()
-            self.new_obstacle.draw(self.screen)
-            self._player1_and_obstacle_collision()
-            self._player2_and_obstacle_collision()
-            self._check_obstacles_bottom()
-            self._drop_obstacles()
-            self.clock.tick(100)
-            self.update()
+            if self.active == True:
+                self.update()
+                self.player1.updates()
+                self.player2.updates()
+                self._drop_obstacles()
+                self._check_obstacles_bottom()
+                self.obstacles.update()
+                self._drop_lifes()
+                self._check_lifes_bottom()
+                self.lifes.update()
+                self._update_obstacles()
+                self._update_lifes()
+                self.check_health()
+                self.clock.tick(100)
 
-
+    def first_screen(self):
+        self.screen.fill((0,0,0))
+        if not self.active:
+            self.button.draw_button()
+        pygame.display.flip()
     #drawing my ocean on the screen
     def update(self):
         for x in range(int(self.rows)):
@@ -50,8 +63,13 @@ class Final():
                 self.screen.blit(self.background_tile, (x*self.water_rect.height, y*self.water_rect.width))
         self.player1.blitme()
         self.player2.blitme()
-        self.new_obstacle.draw(self.screen)
-        self.new_obstacle.update()
+        for obstacle in self.obstacles.sprites():
+            obstacle.draw()
+        for life in self.lifes.sprites():
+            life.draw()
+        print(self.player1.health)
+        # self.new_obstacle.draw(self.screen)
+        # self.new_obstacle.update()
         pygame.display.flip()
 
     def _check_events(self):
@@ -59,16 +77,24 @@ class Final():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_button(mouse_pos)
             elif event.type == pygame.KEYDOWN:
                 self._keydown_event(event)
             elif event.type == pygame.KEYUP:
                 self._keyup_event(event)
+
+    def _check_button(self, mouse_pos):
+        button_clicked = self.button.rect.collidepoint(mouse_pos)
+        if button_clicked and not self.active:
+            self.active = True
+
     def _keydown_event(self,event):
         if event.key == pygame.K_RIGHT:
             self.player1.moving_right = True
         elif event.key == pygame.K_LEFT:
             self.player1.moving_left = True
-            print("ship left")
         elif event.key == pygame.K_d:
             self.player2.moving_right = True
         elif event.key == pygame.K_a:
@@ -99,6 +125,7 @@ class Final():
         screen_rect = self.screen.get_rect()
         for obstacle in self.obstacles.sprites():
             if obstacle.rect.bottom >= screen_rect.bottom:
+                print(10)
                 break
 
     def _drop_obstacles(self):
@@ -107,25 +134,81 @@ class Final():
                 new_obstacle = Obstacle1(self)
                 self.obstacles.add(new_obstacle)
         if len(self.obstacles) == 1:
-            self.new_obstacle.draw(self.screen)
-            self.new_obstacle.update()
             for obstacle in self.obstacles.sprites():
                 print(obstacle.rect)
-                if obstacle.rect.bottom > 300:
+                if obstacle.rect.bottom > 200:
                     new_obstacle = Obstacle1(self)
-                    new_obstacle.draw(self.screen)
-                    new_obstacle.update()
                     self.obstacles.add(new_obstacle)
         if len(self.obstacles) == 2:
             for obstacle in self.obstacles.sprites():
-                if obstacle.rect.bottom > 600:
+                if obstacle.rect.bottom > 400:
                     new_obstacle = Obstacle1(self)
                     self.obstacles.add(new_obstacle)
         if len(self.obstacles) == 3:
             for obstacle in self.obstacles.sprites():
-                if obstacle.rect.bottom > 900:
+                if obstacle.rect.bottom > 600:
                     new_obstacle = Obstacle1(self)
                     self.obstacles.add(new_obstacle)
+
+    def _update_obstacles(self):
+        '''If a apple crosses the window, it disappears'''
+        for obstacle in self.obstacles.copy():
+            if obstacle.rect.bottom >= self.screen_rect.bottom:
+                self.obstacles.remove(obstacle)
+        self._player1_and_obstacle_collision()
+        self._player2_and_obstacle_collision()
+
+    def _check_lifes_bottom(self):
+        '''It checks if the obstacle crosses the screen bottom'''
+        screen_rect = self.screen.get_rect()
+        for life in self.lifes.sprites():
+            if life.rect.bottom >= screen_rect.bottom:
+                break
+
+    def _drop_lifes(self):
+        '''Drop obstacles from the top, randomly'''
+        if len(self.lifes) == 0:
+            new_life = Health(self)
+            self.lifes.add(new_life)
+        if len(self.lifes) == 1:
+            for life in self.lifes.sprites():
+                print(life.rect)
+                if life.rect.bottom > 300:
+                    new_life = Health(self)
+                    self.lifes.add(new_life)
+        if len(self.lifes) == 2:
+            for life in self.lifes.sprites():
+                if life.rect.bottom > 500:
+                    new_life = Health(self)
+                    self.lifes.add(new_life)
+        if len(self.lifes) == 3:
+            for life in self.lifes.sprites():
+                if life.rect.bottom > 700:
+                    new_life = Health(self)
+                    self.lifes.add(new_life)
+
+    def _update_lifes(self):
+        for life in self.lifes.copy():
+            if life.rect.bottom >= self.screen_rect.bottom:
+                self.lifes.remove(life)
+        self.life_and_player1()
+        self.life_and_player2()
+    def life_and_player1(self):
+        collisions = pygame.sprite.spritecollide(self.player1, self.lifes, True)
+        if collisions:
+            # If collision detected add a point
+            self.player1.health += 25
+
+    def life_and_player2(self):
+        collisions = pygame.sprite.spritecollide(self.player2, self.lifes, True)
+        if collisions:
+            # If collision detected add a point
+            self.player2.health +=25
+
+    def check_health(self):
+        if self.player1.health <= -100:
+            pygame.quit()
+            sys.exit()
 
 if __name__ == '__main__':
     game = Final()

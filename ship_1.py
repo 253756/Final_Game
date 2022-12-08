@@ -8,6 +8,7 @@ class Ship1:
 
         # Load the Basket image
         self.image = pygame.image.load('images/ship1.png')
+        self.dead_image = pygame.image.load('images/dead_ship.png')
         self.rect = self.image.get_rect()
         self.rect.midbottom = self.screen_rect.midbottom
 
@@ -19,17 +20,14 @@ class Ship1:
         self.moving_right = False
         self.moving_left = False
 
-    #def draw(self, surface):
-     #   if self.health <=300:
-      #      self.image = self.image
-       # if self.health <= 0:
-        #    self.image = self.dead_image
-        #surface.blit(self.image, self.rect)
-
     def move(self, coordinate):
         self.rect.center = coordinate
 
     def blitme(self):
+        if self.health <=300:
+            self.image = self.image
+        if self.health <= 0:
+            self.image = self.dead_image
         self.screen.blit(self.image, self.rect)
 
     def updates(self):
