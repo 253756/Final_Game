@@ -13,5 +13,6 @@ class Button():
         self.rect.center = self.screen_rect.center
 
     def draw_button(self):
+        """brings the button onto the screen"""
         self.screen.blit(self.image, self.rect)
 
