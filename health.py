@@ -13,7 +13,7 @@ class Health(pygame.sprite.Sprite):
         self.settings = game.settings
 
         #image for health
-        self.image = pygame.image.load('images/dead_ship.png')
+        self.image = pygame.image.load('images/heart.png')
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0, 620)
         self.rect.y = -30

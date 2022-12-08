@@ -11,7 +11,7 @@ class Obstacle1(pygame.sprite.Sprite):
         self.settings = game.settings
 
         #image for obstacle
-        self.image = pygame.image.load('images/rain_drop.png')
+        self.image = pygame.image.load('images/explosion.png')
         self.rect = self.image.get_rect()
 
         #starting positions
