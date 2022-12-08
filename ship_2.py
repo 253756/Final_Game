@@ -31,6 +31,7 @@ class Ship2:
             self.image = self.dead_image
         self.screen.blit(self.image, self.rect)
     def updates(self):
+        """moves and stays in boundary"""
         if self.moving_right and self.rect.right < self.screen_rect.right:
             self.x += 3
         if self.moving_left and self.rect.left > 0:

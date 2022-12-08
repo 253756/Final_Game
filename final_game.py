@@ -13,7 +13,6 @@ class Final():
         pygame.init()
         #create screen background
         self.background_tile = pygame.image.load("images/water_tile.png")
-        self.button = pygame.image.load("images/start_button.png")
         self.water_rect = self.background_tile.get_rect()
         self.tile_size = self.water_rect.width
         self.screen = pygame.display.set_mode((10*self.tile_size,10*self.tile_size))
@@ -22,9 +21,6 @@ class Final():
         self.screen_rect = self.screen.get_rect()
         self.rows = self.screen_rect.height//self.tile_size
         self.cols = self.screen_rect.width//self.tile_size
-
-        #create button
-        self.button = pygame.image.load("images/start_button.png")
 
         self.settings = Settings()
 
