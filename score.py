@@ -28,7 +28,7 @@ class Score:
         self.level_rect.right = self.screen_rect.right -20
         self.level_rect.top = 20
     def player1_score(self):
-        player1_str = str({self.player1.health})
+        player1_str = str(self.player1.health)
         self.player1_image = self.font.render(player1_str, True,
         self.text_color, self.settings.bg_color)
         # Position the level below the score.

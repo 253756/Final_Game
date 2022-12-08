@@ -3,17 +3,17 @@ import sys
 
 class Ship2:
     def __init__(self,game):
+        #screen to show up
         self.screen = game.screen
         self.screen_rect = game.screen.get_rect()
 
-        # Load the Basket image
+        # Load the images
         self.image = pygame.image.load('images/ship2.png')
         self.dead_image = pygame.image.load('images/dead_ship2.png')
-
         self.rect = self.image.get_rect()
         self.rect.midbottom = self.screen_rect.midbottom
 
-        # Store the decimal value for the basket's horizontal position.
+        # Store the decimal value for the ship
         self.x = float(self.rect.x)
 
         # Movement flag
@@ -22,10 +22,9 @@ class Ship2:
 
         self.health = 1000
 
-    def move(self, coordinate):
-        self.rect.center = coordinate
-
     def blitme(self):
+        """draws ship onto screen. when health is above 10 it is normal image and then turns into dead image"""
+
         if self.health <= 300:
             self.image = self.image
         if self.health <= 0:

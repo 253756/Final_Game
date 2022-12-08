@@ -11,6 +11,7 @@ from score import Score
 class Final():
     def __init__(self):
         pygame.init()
+        #create screen background
         self.background_tile = pygame.image.load("images/water_tile.png")
         self.button = pygame.image.load("images/start_button.png")
         self.water_rect = self.background_tile.get_rect()
@@ -21,29 +22,34 @@ class Final():
         self.screen_rect = self.screen.get_rect()
         self.rows = self.screen_rect.height//self.tile_size
         self.cols = self.screen_rect.width//self.tile_size
-        self.clock = pygame.time.Clock()
+
+        #create button
+        self.button = pygame.image.load("images/start_button.png")
+
         self.settings = Settings()
-        self.obstacles = pygame.sprite.Group()
-        self.lifes = pygame.sprite.Group()
-        #self.new_obstacle = Obstacle1(self)
-        self.button = Button(self)
 
         #bring in players
         self.player1 = Ship1(self)
         self.player2 = Ship2(self)
 
-        self.active = False
-
+        #draw in from files
+        self.clock = pygame.time.Clock()
+        self.obstacles = pygame.sprite.Group()
+        self.lifes = pygame.sprite.Group()
+        self.button = Button(self)
         self.score = Score(self)
 
-        self.level = 1
-
+        #initialize for button
+        self.active = False
 
     def run_game(self):
         #helped with button - Ethan
+        #call function with blank screen and button
         self.first_screen()
         while True:
+            #call movements
             self._check_events()
+            #when button is clicked active becomes True
             if self.active == True:
                 self.update()
                 self.player1.updates()
@@ -60,12 +66,14 @@ class Final():
                 self.clock.tick(100)
 
     def first_screen(self):
+        """Screen for button with multiple screen"""
         self.screen.fill((0,0,0))
         if not self.active:
             self.button.draw_button()
         pygame.display.flip()
-    #drawing my ocean on the screen
+
     def update(self):
+        """Drawing screen with tiles and ojects"""
         for x in range(int(self.rows)):
             for y in range(int(self.cols)):
                 self.screen.blit(self.background_tile, (x*self.water_rect.height, y*self.water_rect.width))
@@ -75,14 +83,11 @@ class Final():
             obstacle.draw()
         for life in self.lifes.sprites():
             life.draw()
-        #print(self.player1.health)
-        #print(self.player2.health)
         self.score.show()
-        # self.new_obstacle.draw(self.screen)
-        # self.new_obstacle.update()
         pygame.display.flip()
 
     def _check_events(self):
+        """Movement of players"""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -96,6 +101,7 @@ class Final():
                 self._keyup_event(event)
 
     def _check_button(self, mouse_pos):
+        """When button is clicked active is True and loop starts working"""
         button_clicked = self.button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.active:
             self.active = True
@@ -119,6 +125,7 @@ class Final():
         elif event.key == pygame.K_a:
             self.player2.moving_left = False
     def _player1_and_obstacle_collision(self):
+        """When player1 and obstacle collide the health goes down and score changes"""
         collisions = pygame.sprite.spritecollide(self.player1, self.obstacles, True)
         if collisions:
             # If collision detected add a point
@@ -126,6 +133,7 @@ class Final():
             self.score.player1_score()
 
     def _player2_and_obstacle_collision(self):
+        """When player2 and obstacle collide the health goes down and score changes"""
         collisions = pygame.sprite.spritecollide(self.player2, self.obstacles, True)
         if collisions:
             # If collision detected add a point
@@ -137,7 +145,6 @@ class Final():
         screen_rect = self.screen.get_rect()
         for obstacle in self.obstacles.sprites():
             if obstacle.rect.bottom >= screen_rect.bottom:
-                print(60)
                 break
 
     def _drop_obstacles(self):
@@ -163,7 +170,7 @@ class Final():
                     self.obstacles.add(new_obstacle)
 
     def _update_obstacles(self):
-        '''If a apple crosses the window, it disappears'''
+        '''If a obstacle crosses the window, it disappears'''
         for obstacle in self.obstacles.copy():
             if obstacle.rect.bottom >= self.screen_rect.bottom:
                 self.obstacles.remove(obstacle)
@@ -171,14 +178,14 @@ class Final():
         self._player2_and_obstacle_collision()
 
     def _check_lifes_bottom(self):
-        '''It checks if the obstacle crosses the screen bottom'''
+        '''It checks if the life crosses the screen bottom'''
         screen_rect = self.screen.get_rect()
         for life in self.lifes.sprites():
             if life.rect.bottom >= screen_rect.bottom:
                 break
 
     def _drop_lifes(self):
-        '''Drop obstacles from the top, randomly'''
+        '''Drop life from the top, randomly'''
         if len(self.lifes) == 0:
             new_life = Health(self)
             self.lifes.add(new_life)
@@ -201,12 +208,14 @@ class Final():
 
 
     def _update_lifes(self):
+        """removes life if it crosses the window"""
         for life in self.lifes.copy():
             if life.rect.bottom >= self.screen_rect.bottom:
                 self.lifes.remove(life)
         self.life_and_player1()
         self.life_and_player2()
     def life_and_player1(self):
+        """When player1 and life collide the health goes up and score changes"""
         collisions = pygame.sprite.spritecollide(self.player1, self.lifes, True)
         if collisions:
             # If collision detected add a point
@@ -215,6 +224,7 @@ class Final():
             self.level_up()
 
     def life_and_player2(self):
+        """When player2 and life collide the health goes up and score changes"""
         collisions = pygame.sprite.spritecollide(self.player2, self.lifes, True)
         if collisions:
             # If collision detected add a point
@@ -223,6 +233,8 @@ class Final():
             self.level_up()
 
     def level_up(self):
+        """speed increases as level increases
+        level changes and updates on the screen"""
         self.settings.increase_speed()
         if self.settings.life_speed and self.settings.obstacle_speed >= 6:
             self.settings.life_speed = 6
@@ -238,6 +250,7 @@ class Final():
         self.score.prep_level()
 
     def check_health(self):
+        """"when health is below 50 the game quits and is done"""
         if self.player1.health <= -50:
             pygame.quit()
             sys.exit()
