@@ -1,11 +1,12 @@
 import pygame
 import sys
 from ship_1 import Ship1
-import random
 from obstacle_1 import Obstacle1
 from health import Health
 from ship_2 import Ship2
 from buttons import Button
+from settings import Settings
+from score import Score
 
 class Final():
     def __init__(self):
@@ -15,11 +16,13 @@ class Final():
         self.water_rect = self.background_tile.get_rect()
         self.tile_size = self.water_rect.width
         self.screen = pygame.display.set_mode((10*self.tile_size,10*self.tile_size))
-        self.screen.fill((0,0,0))
+        self.color = (0,0,0)
+        self.screen.fill((self.color))
         self.screen_rect = self.screen.get_rect()
         self.rows = self.screen_rect.height//self.tile_size
         self.cols = self.screen_rect.width//self.tile_size
         self.clock = pygame.time.Clock()
+        self.settings = Settings()
         self.obstacles = pygame.sprite.Group()
         self.lifes = pygame.sprite.Group()
         #self.new_obstacle = Obstacle1(self)
@@ -30,6 +33,11 @@ class Final():
         self.player2 = Ship2(self)
 
         self.active = False
+
+        self.score = Score(self)
+
+        self.level = 1
+
 
     def run_game(self):
         #helped with button - Ethan
@@ -67,7 +75,9 @@ class Final():
             obstacle.draw()
         for life in self.lifes.sprites():
             life.draw()
-        print(self.player1.health)
+        #print(self.player1.health)
+        #print(self.player2.health)
+        self.score.show()
         # self.new_obstacle.draw(self.screen)
         # self.new_obstacle.update()
         pygame.display.flip()
@@ -112,20 +122,22 @@ class Final():
         collisions = pygame.sprite.spritecollide(self.player1, self.obstacles, True)
         if collisions:
             # If collision detected add a point
-            self.player1.health -= 50
+            self.player1.health -= 100
+            self.score.player1_score()
 
     def _player2_and_obstacle_collision(self):
         collisions = pygame.sprite.spritecollide(self.player2, self.obstacles, True)
         if collisions:
             # If collision detected add a point
-            self.player2.health -= 50
+            self.player2.health -= 100
+            self.score.player2_score()
 
     def _check_obstacles_bottom(self):
         '''It checks if the obstacle crosses the screen bottom'''
         screen_rect = self.screen.get_rect()
         for obstacle in self.obstacles.sprites():
             if obstacle.rect.bottom >= screen_rect.bottom:
-                print(10)
+                print(60)
                 break
 
     def _drop_obstacles(self):
@@ -135,7 +147,7 @@ class Final():
                 self.obstacles.add(new_obstacle)
         if len(self.obstacles) == 1:
             for obstacle in self.obstacles.sprites():
-                print(obstacle.rect)
+                #print(obstacle.rect)
                 if obstacle.rect.bottom > 200:
                     new_obstacle = Obstacle1(self)
                     self.obstacles.add(new_obstacle)
@@ -172,7 +184,7 @@ class Final():
             self.lifes.add(new_life)
         if len(self.lifes) == 1:
             for life in self.lifes.sprites():
-                print(life.rect)
+                #print(life.rect)
                 if life.rect.bottom > 300:
                     new_life = Health(self)
                     self.lifes.add(new_life)
@@ -187,6 +199,7 @@ class Final():
                     new_life = Health(self)
                     self.lifes.add(new_life)
 
+
     def _update_lifes(self):
         for life in self.lifes.copy():
             if life.rect.bottom >= self.screen_rect.bottom:
@@ -197,16 +210,38 @@ class Final():
         collisions = pygame.sprite.spritecollide(self.player1, self.lifes, True)
         if collisions:
             # If collision detected add a point
-            self.player1.health += 25
+            self.player1.health += 10
+            self.score.player1_score()
+            self.level_up()
 
     def life_and_player2(self):
         collisions = pygame.sprite.spritecollide(self.player2, self.lifes, True)
         if collisions:
             # If collision detected add a point
-            self.player2.health +=25
+            self.player2.health +=10
+            self.score.player2_score()
+            self.level_up()
+
+    def level_up(self):
+        self.settings.increase_speed()
+        if self.settings.life_speed and self.settings.obstacle_speed >= 6:
+            self.settings.life_speed = 6
+            self.settings.obstacle_speed = 6
+        if self.settings.life_speed >= 3:
+            self.settings.level = 2
+        elif self.settings.life_speed >= 4:
+            self.settings.level = 3
+        elif self.settings.life_speed >= 5:
+            self.settings.level = 4
+        elif self.settings.life_speed >= 6:
+            self.settings.level = 5
+        self.score.prep_level()
 
     def check_health(self):
-        if self.player1.health <= -100:
+        if self.player1.health <= -50:
+            pygame.quit()
+            sys.exit()
+        if self.player2.health <= -50:
             pygame.quit()
             sys.exit()
 

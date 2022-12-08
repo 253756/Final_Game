@@ -9,23 +9,23 @@ class Health(pygame.sprite.Sprite):
         super().__init__()
         self.screen = game.screen
         self.screen_rect = game.screen.get_rect()
+        self.settings = game.settings
         self.moving_up = False
         self.moving_down = False
         self.image = pygame.image.load('images/dead_ship.png')
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0, 620)
         self.rect.y = -30
-        self.speed = 5
+        #self.speed = 6
         self.player1 = Ship1(game)
         self.player2 = Ship2(game)
 
     def update(self):
-        self.rect.y += self.speed
+        self.rect.y += self.settings.life_speed
         if self.rect.bottom == self.screen.get_rect().bottom:
             self.player1.health -= 50
             self.player2.health -= 50
             self.rect.bottom = 0
-
 
 
     def draw(self):
